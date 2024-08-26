@@ -107,9 +107,7 @@
 
   const redirectToRoute = (name) => {
     const currentRoute = router.currentRoute.value
-    if (currentRoute.name === name) {
-      router.go(0)
-    } else {
+    if (currentRoute.name !== name) {
       router.push({ name })
     }
   }
