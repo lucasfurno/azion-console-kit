@@ -319,10 +319,6 @@
     return data
   }
 
-  const onRouteChange = () => {
-    getMainContent()
-  }
-
   const backToMenu = () => {
     articleContent.value = null
     helpCenterStore.clearArticleContent()
@@ -337,7 +333,7 @@
   }
 
   watch(route, () => {
-    onRouteChange()
+    getMainContent()
   })
 
   watch(isOpen, () => {
