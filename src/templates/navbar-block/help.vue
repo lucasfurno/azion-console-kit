@@ -10,7 +10,7 @@
       'bg-header hover:bg-header-button-hover': !helpCenterIsOpen,
       'bg-header-button-enabled': helpCenterIsOpen
     }"
-    icon="pi pi-question-circle"
+    icon="ai ai-ask-azion"
     size="small"
     class="text-white border-header"
     v-tooltip.bottom="{ value: 'Help', showDelay: 200 }"
@@ -36,10 +36,8 @@
   }
 
   const currentLabel = computed(() => {
-    if (currentWidth.value > SCREEN_BREAKPOINT_MD) {
-      return 'Help'
-    }
-    return ''
+    const isDesktopWindowSize = currentWidth.value > SCREEN_BREAKPOINT_MD
+    return isDesktopWindowSize ? 'Help' : ''
   })
 
   const helpCenterIsOpen = computed(() => {
