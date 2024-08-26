@@ -45,7 +45,7 @@ export default {
         width: 'width'
       },
       width: {
-        slide: '384px'
+        slide: '500px'
       },
       height: {
         // subtract 60px for footer and 56px for header

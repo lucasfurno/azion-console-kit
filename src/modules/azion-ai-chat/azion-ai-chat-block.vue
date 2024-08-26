@@ -51,10 +51,11 @@
   import { makeRequestConfig } from './services/make-request-config'
   import { makeSessionId } from './services/make-session-id'
   import azionLogoProfile from '@/modules/azion-ai-chat/assets/azion-logo.svg?url'
-  import { onMounted, ref, watchEffect } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { onMounted, ref, watchEffect, computed } from 'vue'
+  import { useRouter, useRoute } from 'vue-router'
   import { useAccountStore } from '@/stores/account'
   const { currentRoute } = useRouter()
+  const { name: routerName } = useRoute()
   const { account } = useAccountStore()
 
   defineOptions({
@@ -81,6 +82,11 @@
       default: 'Connection failed. Try sending your message again.'
     }
   })
+
+  const deepChatBorder = computed(() => {
+    return routerName === 'copilot' ? '1px solid var(--surface-border)' : 'none'
+  })
+
   const deepChatStyles = ref({
     fontFamily: 'var(--font-family)',
     width: '100%',
@@ -88,7 +94,7 @@
     position: 'sticky',
     top: '56px',
     backgroundColor: 'var(--surface-section)',
-    border: '1px solid var(--surface-border)',
+    border: deepChatBorder,
     overflow: 'hidden'
   })
   const messageStyles = ref({

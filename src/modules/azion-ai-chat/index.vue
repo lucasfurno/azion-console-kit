@@ -1,36 +1,5 @@
 <template>
-  <div
-    :style="{ 'background-color': 'var(--surface-section)' }"
-    class="hidden flex-col w-full surface-border border-l h-[100ldh] transform translate-x-full transition-transform duration-300 ease-in-out sm:w-[500px] 2xl:w-[800px]"
-  >
-    <AzionAiChatHeader>
-      <template #header-actions>
-        <PrimeButton
-          icon="pi pi-external-link"
-          outlined
-          class="surface-border h-8 w-8"
-          aria-label="Open a chat in new tab"
-          v-tooltip.bottom="'Open a chat in new tab'"
-          @click="openChatInNewTab"
-        />
-        <PrimeButton
-          icon="pi pi-pen-to-square"
-          outlined
-          class="surface-border h-8 w-8"
-          aria-label="New Chat"
-          v-tooltip.bottom="'New Chat'"
-          @click="handleClearChat"
-        />
-        <PrimeButton
-          icon="pi pi-times"
-          outlined
-          class="surface-border h-8 w-8"
-          aria-label="Close"
-          @click="azionAiChatStore.close()"
-        />
-      </template>
-    </AzionAiChatHeader>
-
+  <div :style="{ 'background-color': 'var(--surface-section)' }">
     <div
       class="h-full flex justify-between flex-col"
       :key="renderCount"
@@ -53,7 +22,6 @@
         <div class="flex items-center justify-between">
           <h2 class="flex items-center gap-2">
             Copilot
-
             <PrimeTag
               class="ml-2"
               value="Experimental"
@@ -105,10 +73,8 @@
   import PrimeTag from 'primevue/tag'
   import Sidebar from 'primevue/sidebar'
   import PrimeButton from 'primevue/button'
-  import AzionAiChatHeader from './azion-ai-chat-header-block.vue'
   import AzionAiChat from './azion-ai-chat-block.vue'
-
-  import { useAzionAiChatStore } from '@/stores/azion-ai-chat-store'
+  import { useHelpCenterStore } from '@/stores/help-center'
   import { updateSessionId } from './services/make-session-id'
   import { computed, onMounted, onUnmounted, ref } from 'vue'
   import hljs from 'highlight.js'
@@ -132,9 +98,9 @@
     window.removeEventListener('message', aiCustomPromptListenerHandler)
   })
 
-  const azionAiChatStore = useAzionAiChatStore()
+  const helpCenterStore = useHelpCenterStore()
   const isChatAiOpen = computed(() => {
-    return azionAiChatStore.isOpen
+    return helpCenterStore.isOpen
   })
 
   const addSupportToHljs = () => {
@@ -156,7 +122,7 @@
 
   const aiCustomPromptListenerHandler = (event) => {
     if (event.data.type === AZION_MESSAGE_TYPE) {
-      azionAiChatStore.open()
+      helpCenterStore.open()
       azionAiChatRef?.value.deepChatRef.submitUserMessage({ text: event.data.prompt })
       setTimeout(() => {
         azionAiChatMobileRef?.value.deepChatRef.submitUserMessage({ text: event.data.prompt })
