@@ -1,6 +1,6 @@
 <script setup>
   import { useField, useFieldArray } from 'vee-validate'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
   import FieldAutoComplete from '@/templates/form-fields-inputs/fieldAutoComplete'
   import FieldDropdown from '@/templates/form-fields-inputs/fieldDropdown'
@@ -298,10 +298,6 @@
     activeAccordions.value[index] = invertedAccordionState
   }
 
-  const handleTabClose = (index) => {
-    console.log(index)
-    activeAccordions.value[index] = 0
-  }
   const addNewConditional = ({ index, operator }) => {
     criteria.value[index].value.push({ ...DEFAULT_OPERATOR, conditional: operator })
   }
@@ -383,6 +379,16 @@
     const MAXIMUM_ALLOWED = 5
     return criteria.value.length >= MAXIMUM_ALLOWED
   })
+  // Verificar se existe errors e se sim, abrir os colapses corretos
+  watch(
+    () => activeAccordions.value,
+    () => {      
+      setTimeout(() => {
+        activeAccordions.value[0] = 0
+      }, 1)
+    },
+    { deep: true }
+  )
 </script>
 
 <template>
@@ -462,11 +468,8 @@
         v-for="(criteriaItem, criteriaIndex) in criteria"
         :key="criteriaIndex"
       >
-        <Accordion
-          v-model:activeIndex="activeAccordions[criteriaIndex]"
-          @update:activeIndex="handleTabClose(criteriaIndex)"
-        >
-          <AccordionTab :header="`Criteria ${criteriaIndex + 1}`">
+        <Accordion v-model:activeIndex="activeAccordions[criteriaIndex]">
+          <AccordionTab :header="`Criteria ${criteriaIndex + 1}`" @click.stop="(e) => e.stopPropagation().preventDefault()">
             <template #header>
               <div class="ml-auto flex justify-center items-center">
                 <PrimeButton
