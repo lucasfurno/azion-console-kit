@@ -90,7 +90,7 @@
   const deepChatStyles = ref({
     fontFamily: 'var(--font-family)',
     width: '100%',
-    height: 'calc(100svh - 113px)',
+    height: 'calc(100svh - 190px)',
     position: 'sticky',
     top: '56px',
     backgroundColor: 'var(--surface-section)',

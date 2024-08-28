@@ -2,10 +2,21 @@
   import ContentBlock from '@/templates/content-block'
   import AzionAiChatFullSizeBlock from '@/modules/azion-ai-chat/azion-ai-chat-full-size-block.vue'
   import PrimeButton from 'primevue/button'
-  import { ref } from 'vue'
+  import { ref, computed } from 'vue'
   import InlineMessage from 'primevue/inlinemessage'
+  import { useHelpCenterStore } from '@/stores/help-center'
 
   const azionAiChat = ref(null)
+  const helpCenterStore = useHelpCenterStore()
+
+  const helpCenterIsOpen = computed(() => {
+    return helpCenterStore.isOpen
+  })
+
+  const customStyleRightPosition = computed(() => {
+    return helpCenterIsOpen.value ? 'right-[596px]' : 'right-24'
+  })
+
   const handleClearChat = () => {
     azionAiChat?.value.handleClearChat()
   }
@@ -14,7 +25,7 @@
 <template>
   <ContentBlock>
     <template #content>
-      <div class="fixed z-10 right-24 bottom-[100px] max-sm:bottom-[112px] max-sm:right-[72px]">
+      <div :class="['fixed z-10  bottom-[137px] max-sm:right-[72px]', customStyleRightPosition]">
         <PrimeButton
           text
           v-tooltip.top="{ value: 'Start a new chat', showDelay: 200 }"

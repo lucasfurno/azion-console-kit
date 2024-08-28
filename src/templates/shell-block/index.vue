@@ -15,7 +15,7 @@
 
     <HelpBlock
       class="z-10"
-      :class="customClassHelper"
+      :class="[customClassHelper, { hidden: !helpCenterStore.isOpen }]"
     />
   </main>
 
@@ -50,5 +50,4 @@
 
   const customClass = computed(() => (helpCenterStore.isOpen ? 'active' : ''))
   const customClassHelper = computed(() => (helpCenterStore.isOpen ? 'active-helper' : ''))
-  const styleHelper = '[&>.active-helper]:block transform [&>.active-helper]:md:translate-x-0'
 </script>

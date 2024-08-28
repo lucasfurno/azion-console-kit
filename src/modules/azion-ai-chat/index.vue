@@ -33,11 +33,11 @@
           </h2>
           <div class="gap-4 flex">
             <PrimeButton
-              icon="pi pi-external-link"
+              icon="pi pi-window-maximize"
               outlined
               class="surface-border h-8 w-8"
-              aria-label="Open a chat in new tab"
-              v-tooltip.bottom="'Open a chat in new tab'"
+              aria-label="Open Copilot in a new tab"
+              v-tooltip.bottom="'Open Copilot in a new tab'"
               @click="openChatInNewTab"
             />
             <PrimeButton

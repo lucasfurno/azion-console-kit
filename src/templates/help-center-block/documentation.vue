@@ -4,7 +4,7 @@
     <div class="overflow-y-auto h-[calc(100vh-5rem)] flex flex-col justify-between">
       <div class="mb-5">
         <!-- Input Search  -->
-        <div class="mt-6">
+        <div>
           <span class="p-input-icon-left w-full">
             <i class="pi pi-search" />
             <InputText
