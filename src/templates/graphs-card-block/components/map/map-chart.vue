@@ -18,14 +18,16 @@
   import { useAccountStore } from '@/stores/account'
   import { storeToRefs } from 'pinia'
   import * as countries from './json/countries.json'
+  import * as regions from './json/regions.json'
   import {
     setOceanFeature,
     setCountryFeature,
     setLakeFeature
   } from './utils/common-features-handler'
   import { setFeatureStyle } from './utils/features-styler'
-  import { heatmapHandler } from './utils/features-handler'
-
+  import { bubblesHandler, heatmapHandler } from './utils/features-handler'
+  import { fromLonLat } from 'ol/proj.js'
+  import { Circle } from 'ol/geom.js'
   import { Map, View } from 'ol/index.js'
   import GeoJSON from 'ol/format/GeoJSON.js'
   import { Vector as VectorSource } from 'ol/source.js'
@@ -53,6 +55,25 @@
   })
 
   onClickOutside(mapTemplateRef, () => hideTooltip())
+
+  const generateBubbles = computed(() => {
+    const bubbles = new GeoJSON().readFeatures(regions)
+    bubbles.forEach((bubble) => {
+      const bubbleData = bubblesHandler(bubble.get('name'), props.resultChart[0].bubbles)
+      if (!bubbleData) {
+        return setFeatureStyle(bubble)
+      }
+      bubble.setGeometry(
+        new Circle(fromLonLat(bubble.getGeometry().getCoordinates()), bubbleData.size)
+      )
+      bubble.setProperties({
+        kind: 'bubble',
+        value: bubbleData.value
+      })
+      setFeatureStyle(bubble, bubbleData.variation)
+    })
+    return bubbles
+  })
 
   const generateAreas = computed(() => {
     const areas = new GeoJSON().readFeatures(countries)
@@ -88,6 +109,7 @@
               ...setOceanFeature(),
               ...setCountryFeature(),
               ...setLakeFeature(),
+              ...generateBubbles.value,
               ...generateAreas.value
             ]
           })

@@ -7,7 +7,7 @@ import {
  * Describes the structure of the GraphQL query.
  *
  * @param {Object} options - The options object.
- * @param {string} options.dataset - The name of the dataset.
+ * @param {String} options.dataset - The name of the dataset.
  * @param {Array} options.aggregations - The list of aggregations used.
  * @param {Object} options.filters - The filters to be applied.
  * @param {Object} options.fields - The fields to be included.
@@ -17,6 +17,7 @@ import {
  * @param {boolean} options.isTopX - Whether the obtained data is in the Top X format.
  * @param {string} options.xAxis - The X-axis variable.
  * @param {string} options.orderDirection - The direction of ordering.
+ * @param {Array} options.moreDataSet - The direction of ordering.
  */
 export default class GqlRules {
   queryBody = {}
@@ -37,7 +38,8 @@ export default class GqlRules {
     limit = 2000,
     isTopX = false,
     xAxis = 'ts',
-    orderDirection = 'ASC'
+    orderDirection = 'ASC',
+    moreDataSet = []
   }) {
     this.dataset = dataset
     this.aggregations = aggregations
@@ -49,6 +51,7 @@ export default class GqlRules {
     this.isTopX = isTopX
     this.xAxis = xAxis
     this.orderDirection = orderDirection
+    this.moreDataSet = moreDataSet
   }
 
   /**
@@ -100,6 +103,39 @@ export default class GqlRules {
     this.queryVariables = variables
   }
 
+  generateGraphQuery(datasets, filtersStr, orderBy) {
+    return datasets
+      .map((item) => {
+        const { dataset, limit, fields, groupBy, aggregations } = item
+
+        let aggregationsText = ''
+        if (aggregations.length) {
+          aggregationsText += 'aggregate: {'
+          aggregations.forEach((aggregation) => {
+            aggregationsText += `${aggregation.aggregation}: ${aggregation.variable} \n`
+            fields.push(aggregation.aggregation)
+          })
+          aggregationsText += '}'
+        }
+
+        return `
+          test: ${dataset} (
+            limit: ${limit}
+            ${aggregationsText}
+            groupBy: [${groupBy.join(', ')}]
+            orderBy: [${orderBy}]
+            filter: {
+              ${filtersStr}
+            }
+          ) {
+            ${fields.join('\n')}
+          }
+        }
+      `
+      })
+      .join('\n')
+  }
+
   /**
    * Generates a GraphQL query based on the set group by, order by, filters, and variables.
    *
@@ -132,7 +168,7 @@ export default class GqlRules {
     if (this.groupBy !== null) fields.push(...this.groupBy)
 
     const params = this.filterDetails.map((param) => `${param.name}:${param.type}`)
-    const query = `query (${params.join(', ')}) {
+    let query = `query (${params.join(', ')}) {
       ${this.dataset} (
         limit: ${this.limit}
         ${aggregationsText}
@@ -145,6 +181,11 @@ export default class GqlRules {
           ${fields.join('\n')}
         }
       }`
+
+    if (this.moreDataSet.length) {
+      query = query.trim().slice(0, -1)
+      query += this.generateGraphQuery(this.moreDataSet, filtersStr, this.orderBy, params)
+    }
 
     const graphQLQuery = {
       query,

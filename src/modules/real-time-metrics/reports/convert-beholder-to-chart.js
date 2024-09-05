@@ -506,6 +506,69 @@ const formatListChart = ({ report, data }) => {
   ]
 }
 
+const BUBBLES_DATA = [
+  {
+    countryName: 'Chile',
+    value: 32559,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'Djibouti',
+    value: 195,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'Netherlands',
+    value: 29528,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'United Arab Emirates',
+    value: 25003,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'South Africa',
+    value: 1190,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'Nigeria',
+    value: 80,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'Venezuela',
+    value: 350,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'Mexico',
+    value: 11890,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'India',
+    value: 4559,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'Uruguay',
+    value: 43921,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'Madagascar',
+    value: 8987,
+    rangeVariation: 'regular'
+  },
+  {
+    countryName: 'France',
+    value: 19876,
+    rangeVariation: 'regular'
+  }
+]
+
 const formatMapChartData = ({ report, data }) => {
   const dataset = Object.keys(data)
   const geolocCountryName = report.groupBy[0]
@@ -523,7 +586,7 @@ const formatMapChartData = ({ report, data }) => {
 
   return [
     {
-      bubbles: [],
+      bubbles: BUBBLES_DATA,
       heatmap
     }
   ]

@@ -10,6 +10,47 @@ describe('RealTimeMetricsModule', () => {
     it('should have the correct of values', () => {
       const reports = [
         {
+          id: '555555555555555555',
+          chartOwner: 'azion',
+          label: 'Maps Chart',
+          description: 'description',
+          aggregationType: 'sum',
+          columns: 6,
+          type: 'map',
+          xAxis: 'cat',
+          isTopX: true,
+          rotated: true,
+          dataUnit: 'bytes',
+          dataset: 'httpMetrics',
+          limit: 5,
+          fields: ['bandwidthTotal'],
+          groupBy: ['geolocCountryName'],
+          aggregations: [
+            {
+              aggregation: 'count',
+              variable: 'rows'
+            }
+          ],
+          orderDirection: 'DESC',
+          dashboardId: '11111111111111111',
+          helpCenterPath: 'path',
+          variationType: 'regular',
+          moreDataSet: [
+            {
+              dataset: 'httpMetrics',
+              limit: 5,
+              fields: ['bandwidthTotal'],
+              groupBy: ['geolocCountryName'],
+              aggregations: [
+                {
+                  aggregation: 'count',
+                  variable: 'rows'
+                }
+              ]
+            }
+          ]
+        },
+        {
           aggregationType: 'sum',
           chartOwner: 'azion',
           columns: 6,

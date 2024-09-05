@@ -87,7 +87,7 @@ export default async function LoadReportWithMeta(filters, report, userUTC) {
     resultQuery[dataset] = FillResultQuery(props)
   }
 
-  const hasDataset = dataset && resultQueryRaw[dataset].length > 1
+  const hasDataset = dataset && resultQueryRaw[dataset[0]].length > 1
 
   if (hasDataset) {
     resultQuery = removeUnfinishedRegister(resultQueryRaw, filterLastRegisterFail)
